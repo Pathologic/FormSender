@@ -62,7 +62,7 @@
             errorClass: 'has-error',
             errorMessageElement: 'div',
             errorMessageClass: 'help-block',
-            successMessageText: 'The form was successfully sent',
+            successMessageText: 'The form has been sent successfully',
             errorMessageText: 'Failed to send',
             url: '/forms'
         };
@@ -102,7 +102,6 @@
             const event = this.invokeEvent(form, 'fs:before', {
                 wrapper: wrapper,
                 data: data,
-                fs: this
             });
             if (event.isPrevented()) return;
 
@@ -115,7 +114,6 @@
                         wrapper: wrapper,
                         data: data,
                         response: response,
-                        fs: this
                     });
                     if (!event.isPrevented()) {
                         if (typeof response.redirect !== 'undefined') {
@@ -126,6 +124,8 @@
                             messager.message('info', response.messages);
                         } else {
                             form.reset();
+                            that.beforeSubmit();
+                            that.afterSubmit();
                             messager.message('info', that.options.successMessageText);
                         }
                     }
@@ -134,7 +134,6 @@
                         wrapper: wrapper,
                         data: data,
                         response: response,
-                        fs: this
                     });
                     if (!event.isPrevented()) {
                         that.processErrors(response, form);
@@ -144,7 +143,6 @@
                     wrapper: wrapper,
                     data: data,
                     response: response,
-                    fs: that
                 })
             }, function (error) {
                 that.afterSubmit(form);
@@ -154,7 +152,6 @@
                     form: form,
                     data: data,
                     error: error,
-                    fs: that
                 })
             });
         };

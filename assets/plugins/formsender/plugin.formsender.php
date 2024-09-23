@@ -20,7 +20,7 @@ if(evo()->event->name == 'OnLoadSettings') {
             $params = require($files[$formid]);
             $snippet = $params['snippet'] ?? 'FormLister';
             unset($params['snippet']);
-            $params['api'] = $params['api'] ?? 1;
+            $params['api'] = $params['api'] ?? 2;
             $params['apiFormat'] = 'array';
 
             return evo()->runSnippet($snippet, $params);
@@ -30,5 +30,5 @@ if(evo()->event->name == 'OnLoadSettings') {
     });
 }
 if(evo()->event->name == 'OnLoadWebDocument') {
-    evo()->regClientStartupHTMLBlock('<script defer src="' . MODX_SITE_URL . 'assets/plugins/formsender/formsender.min.js"></script');
+    evo()->regClientStartupHTMLBlock('<script defer src="' . MODX_SITE_URL . 'assets/plugins/formsender/formsender.min.js"></script>');
 } 
