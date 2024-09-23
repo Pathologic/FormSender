@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\Finder\Finder;
 
+if(!function_exists('app')) return;
 if(evo()->event->name == 'OnLoadSettings') {
     $url = $url ?? '/forms';
     Route::post($url, function(){
