@@ -62,15 +62,23 @@
             errorClass: 'has-error',
             errorMessageElement: 'div',
             errorMessageClass: 'help-block',
-            successMessageText: 'The form has been sent successfully',
+            successMessageText: 'The form was successfully sent',
             errorMessageText: 'Failed to send',
-            url: '/forms'
+            url: '/forms',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         };
 
         messager = new FormSenderMessager(alert, alert);
 
         constructor(options = {}) {
             if (typeof options !== 'object') throw new Error('Wrong options');
+
+            if (typeof options.headers === 'object') {
+                Object.assign(this.options.headers, options.headers);
+            }
+            delete options.headers;
 
             if (typeof options.messager === 'object' && options.messager.constructor === FormSenderMessager) {
                 this.messager = options.messager;
@@ -124,8 +132,6 @@
                             messager.message('info', response.messages);
                         } else {
                             form.reset();
-                            that.beforeSubmit();
-                            that.afterSubmit();
                             messager.message('info', that.options.successMessageText);
                         }
                     }
@@ -149,7 +155,6 @@
                 messager.message('error', that.options.errorMessageText);
                 that.invokeEvent(form, 'fs:error', {
                     wrapper: wrapper,
-                    form: form,
                     data: data,
                     error: error,
                 })
@@ -179,10 +184,9 @@
             fetch(new Request(this.options.url, {
                 method: 'post',
                 credentials: 'same-origin',
-                headers: {
-                    Accept: 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
+                headers: Object.assign(this.options.headers, {
+                    Accept: 'application/json'
+                }),
                 body: data
             }))
                 .then(response => {
