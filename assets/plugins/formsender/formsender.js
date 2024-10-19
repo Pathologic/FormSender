@@ -62,7 +62,7 @@
             errorClass: 'has-error',
             errorMessageElement: 'div',
             errorMessageClass: 'help-block',
-            successMessageText: 'The form was successfully sent',
+            successMessageText: 'The form has been sent successfully',
             errorMessageText: 'Failed to send',
             url: '/forms',
             headers: {
@@ -132,6 +132,8 @@
                             messager.message('info', response.messages);
                         } else {
                             form.reset();
+                            that.beforeSubmit(form);
+                            that.afterSubmit(form);
                             messager.message('info', that.options.successMessageText);
                         }
                     }
